@@ -1,6 +1,6 @@
 [Setup]
 AppName=AppBlocker
-AppVersion=1.1
+AppVersion=2.1
 DefaultDirName={localappdata}\AppBlocker
 DefaultGroupName=AppBlocker
 OutputDir=installer_output
