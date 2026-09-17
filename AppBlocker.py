@@ -78,6 +78,7 @@ def SAVE_CODE():
 					code2 = tk.Entry(save_code_window, show="*")
 					code2.pack()
 					code2.focus_force()
+					code2.bind("<Return>", lambda e: CHECK_FIRST_CODE() if not isFirstButtonClicked else CHECK_SECOND_CODE())
 
 					code2_button = tk.Button(
 						save_code_window,
@@ -125,7 +126,6 @@ def SAVE_CODE():
 			save_code_window.title("Confirm the code.")
 			save_code_window.transient(window)
 			save_code_window.grab_set()
-			save_code_window.bind("<Return>", lambda e: CHECK_FIRST_CODE() if not isFirstButtonClicked else CHECK_SECOND_CODE())
 
 			Text1 = tk.Label(
 				save_code_window,
@@ -136,6 +136,7 @@ def SAVE_CODE():
 			code1 = tk.Entry(save_code_window, show="*")
 			code1.pack()
 			code1.focus_force()
+			code1.bind("<Return>", lambda e: CHECK_FIRST_CODE() if not isFirstButtonClicked else CHECK_SECOND_CODE())
 
 			code1_button = tk.Button(save_code_window, text="confirm", command=CHECK_FIRST_CODE)
 			code1_button.pack(pady=(10, 0))
