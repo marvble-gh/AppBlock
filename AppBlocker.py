@@ -273,7 +273,6 @@ def ASK_FOR_CODE(app_path):
 		code_window = tk.Tk()
 		code_window.geometry("275x100")
 		code_window.title("Enter Code.")
-		code_window.bind("<Return>", lambda e: ENTER_CODE())
 		code_window.resizable(False, False)
 		try:
 			code_window.iconbitmap(KeyIconPath)  # .ico required
@@ -286,6 +285,7 @@ def ASK_FOR_CODE(app_path):
 		check_code = tk.Entry(code_window)
 		check_code.pack()
 		check_code.focus_force()
+		check_code.bind("<Return>", lambda e: ENTER_CODE())
 
 
 		enter_button = tk.Button(code_window, text="Enter", command=ENTER_CODE)
