@@ -60,19 +60,32 @@ def LOADAPPS():
 		logging.error(f"Error occurred while running LOADAPPS: {e}\n{traceback.format_exc()}")
 
 def SAVE_CODE():
-
 	try:
-		#=====================================OPTIONAL=============================================
-		def SAVE_CODE_WINDOW(): #Creates a new tkinter window to make a new code verification. It prevents from cracking the code that easily.
+
+		# =====================================OPTIONAL=============================================
+		def SAVE_CODE_WINDOW():
+			global isFirstButtonClicked
+			isFirstButtonClicked = False
+
+			# Creates a new tkinter top level window to make a new code verification.
+			# It prevents from cracking the code that easily.
 			def CHECK_FIRST_CODE():
-				if code1.get() == data["code"]:
+				global isFirstButtonClicked
+				if code1.get() == data["code"] and not isFirstButtonClicked:
+					isFirstButtonClicked = True
+					save_code_window.geometry("300x300")
 					Text2 = tk.Label(save_code_window, text="Confirm saved code:")
 					Text2.pack(pady=(10, 0))
 
 					code2 = tk.Entry(save_code_window, show="*")
 					code2.pack()
+					code2.focus_force()
 
-					code2_button = tk.Button(save_code_window, text="confirm", command=lambda: CHECK_SECOND_CODE(code2))
+					code2_button = tk.Button(
+						save_code_window,
+						text="confirm",
+						command=lambda: CHECK_SECOND_CODE(code2),
+					)
 					code2_button.pack(pady=(10, 0))
 
 			def CHECK_SECOND_CODE(code2):
@@ -81,25 +94,57 @@ def SAVE_CODE():
 					data["code"] = saved_code
 					save_code_window.destroy()
 
+			def CATCH_WINDOW():
+				def CLOSE_SAVE_CODE_WINDOW():
+					save_code_window.destroy()
+				def CLOSE_CATCH_WINDOW():
+					catch_window.destroy()
+					save_code_window.grab_set()
 
-			global isSaveCodeWindowShowing
-			save_code_window = tk.Tk()
-			save_code_window.geometry("350x350")
+				catch_window = tk.Toplevel(save_code_window)
+				catch_window.geometry("150x150")
+				catch_window.title(" ")
+				catch_window.resizable(width=False, height=False)
+				catch_window.grab_set()
+
+				text1 = tk.Label(catch_window, text="Are you sure? "
+								"New password won't be set.")
+				text1.pack(pady=(10,10))
+
+				frame = tk.Frame(catch_window)
+				frame.pack(pady=(20,5))
+
+				button1 = tk.Button(frame,text="Yes", command=CLOSE_SAVE_CODE_WINDOW)
+				button1.pack(side="left", padx=(15,0))
+
+				button2 = tk.Button(frame, text="No", command=CLOSE_CATCH_WINDOW)
+				button2.pack(side="left", padx=(15, 0))
+
+
+			save_code_window = tk.Toplevel(window)
+			save_code_window.geometry("300x200")
 			save_code_window.title("Confirm the code.")
-			isSaveCodeWindowShowing = True
+			save_code_window.transient(window)
+			save_code_window.grab_set()
+			save_code_window.bind("<Return>", lambda e: CHECK_FIRST_CODE() if not isFirstButtonClicked else CHECK_SECOND_CODE())
 
-			Text1 = tk.Label(save_code_window, text="To change the code, you must enter previous code:")
+			Text1 = tk.Label(
+				save_code_window,
+				text="To change the code, you must enter previous code:",
+			)
 			Text1.pack(pady=(10, 0))
 
 			code1 = tk.Entry(save_code_window, show="*")
 			code1.pack()
+			code1.focus_force()
 
 			code1_button = tk.Button(save_code_window, text="confirm", command=CHECK_FIRST_CODE)
 			code1_button.pack(pady=(10, 0))
 
-			save_code_window.mainloop()
-			isSaveCodeWindowShowing = False
-		#===========================================================================================
+			save_code_window.protocol("WM_DELETE_WINDOW", CATCH_WINDOW)
+			save_code_window.wait_window()
+
+		# ===========================================================================================
 
 		if not isCodeWindowShowing:
 			if data.get("code", []) == []:
@@ -109,10 +154,9 @@ def SAVE_CODE():
 					json.dump(data, file)
 			elif data.get("code", []) != []:
 				SAVE_CODE_WINDOW()
+
 	except Exception as e:
 		logging.error(f"Error occurred while running SAVE_CODE: {e}\n{traceback.format_exc()}")
-
-
 def ADD_TO_AUTOSTART():
 	def PATH_OVERWRITE():
 		key = winreg.OpenKey(
@@ -125,7 +169,7 @@ def ADD_TO_AUTOSTART():
 		winreg.CloseKey(key)
 
 	try:
-	
+
 		key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0,
 		                       winreg.KEY_READ)
 		value, _ = winreg.QueryValueEx(key, "AppBlocker")
@@ -233,6 +277,8 @@ def ASK_FOR_CODE(app_path):
 		code_window = tk.Tk()
 		code_window.geometry("275x100")
 		code_window.title("Enter Code.")
+		code_window.bind("<Return>", lambda e: ENTER_CODE())
+		code_window.resizable(False, False)
 		try:
 			code_window.iconbitmap(KeyIconPath)  # .ico required
 		except Exception as e:
@@ -243,13 +289,15 @@ def ASK_FOR_CODE(app_path):
 
 		check_code = tk.Entry(code_window)
 		check_code.pack()
-		check_code.focus_set()
+		check_code.focus_force()
 
 
 		enter_button = tk.Button(code_window, text="Enter", command=ENTER_CODE)
 		enter_button.pack()
 
 		isCodeWindowShowing = True
+
+		code_window.grab_set()
 
 		MONITORING_THREAD_2 = threading.Thread(target=MONITORING_FUNCTION_2, daemon=True)
 		MONITORING_THREAD_2.start()
@@ -356,6 +404,7 @@ isDataLoaded = False
 window = tk.Tk()
 window.title("App Blocker")
 window.geometry("500x500")
+window.resizable(width=False, height=False)
 data={}
 unlocked={}
 
