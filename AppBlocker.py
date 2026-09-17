@@ -44,8 +44,6 @@ def ADDAPP():
 
 			data.setdefault("apps", []).append(path)
 			data["AppBlockerName"] = programName
-			with open(data_path, "w") as file:
-				json.dump(data, file)
 
 	except Exception as e:
 			logging.error(f"Error occurred while running ADDAPP: {e}\n{traceback.format_exc()}")
@@ -73,7 +71,7 @@ def SAVE_CODE():
 				global isFirstButtonClicked
 				if code1.get() == data["code"] and not isFirstButtonClicked:
 					isFirstButtonClicked = True
-					save_code_window.geometry("300x300")
+					save_code_window.geometry("300x225")
 					Text2 = tk.Label(save_code_window, text="Confirm saved code:")
 					Text2.pack(pady=(10, 0))
 
@@ -102,27 +100,28 @@ def SAVE_CODE():
 					save_code_window.grab_set()
 
 				catch_window = tk.Toplevel(save_code_window)
-				catch_window.geometry("150x150")
+				catch_window.geometry("225x150")
 				catch_window.title(" ")
 				catch_window.resizable(width=False, height=False)
 				catch_window.grab_set()
 
-				text1 = tk.Label(catch_window, text="Are you sure? "
-								"New password won't be set.")
+				text1 = tk.Label(catch_window, text="New password won't be set.")
+				text2 = tk.Label(catch_window, text="Are you sure?")
 				text1.pack(pady=(10,10))
+				text2.pack(pady=(10,10))
 
 				frame = tk.Frame(catch_window)
 				frame.pack(pady=(20,5))
 
 				button1 = tk.Button(frame,text="Yes", command=CLOSE_SAVE_CODE_WINDOW)
-				button1.pack(side="left", padx=(15,0))
+				button1.pack(side="left", padx=(30,0))
 
 				button2 = tk.Button(frame, text="No", command=CLOSE_CATCH_WINDOW)
-				button2.pack(side="left", padx=(15, 0))
+				button2.pack(side="left", padx=(30, 0))
 
 
 			save_code_window = tk.Toplevel(window)
-			save_code_window.geometry("300x200")
+			save_code_window.geometry("300x125")
 			save_code_window.title("Confirm the code.")
 			save_code_window.transient(window)
 			save_code_window.grab_set()
@@ -147,11 +146,9 @@ def SAVE_CODE():
 		# ===========================================================================================
 
 		if not isCodeWindowShowing:
-			if data.get("code", []) == []:
+			if data.get("code", []) == [] or code_frame.get() == data.get("code", []):
 				saved_code = code_frame.get()
 				data["code"] = saved_code
-				with open(data_path, "w") as file:
-					json.dump(data, file)
 			elif data.get("code", []) != []:
 				SAVE_CODE_WINDOW()
 
@@ -189,8 +186,6 @@ def DELETEAPP():
 		for iid in sorted(marking, key=int, reverse=True):
 			app_listbox.delete(iid)
 			data["apps"].pop(int(iid))
-			with open(data_path, "w") as file:
-				json.dump(data, file)
 	except Exception as e:
 		logging.error(f"Error occurred while running DELETEAPP: {e}\n{traceback.format_exc()}")
 
@@ -461,9 +456,6 @@ try:
 			isDataLoaded = True
 
 	data["AppBlockerName"] = programName
-
-	with open(data_path, "w") as file:
-		json.dump(data, file)
 
 
 except Exception as e:
