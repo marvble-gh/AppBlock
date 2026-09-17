@@ -1,6 +1,6 @@
 [Setup]
 AppName=AppBlocker
-AppVersion=1.0
+AppVersion=2.1
 DefaultDirName={localappdata}\AppBlocker
 DefaultGroupName=AppBlocker
 OutputDir=installer_output
@@ -21,5 +21,5 @@ Name: "{group}\AppBlocker"; Filename: "{app}\AppBlocker.exe"
 Name: "{commondesktop}\AppBlocker"; Filename: "{app}\AppBlocker.exe"
 
 [Run]
-Filename: "{sys}\ie4uinit.exe"; Parameters: "-ClearIconCache"; Flags: runhidden
+Filename: "{sys}\ie4uinit.exe"; Parameters: "-ClearIconCache"; Flags: runhidden skipifdoesntexist; StatusMsg: "Refreshing icon cache..."
 Filename: "{app}\AppBlocker.exe"; Description: "Launch AppBlocker"; Flags: postinstall nowait skipifsilent
