@@ -1,8 +1,21 @@
-# AppBlocker
+# AppBlocker 🔐
 
 AppBlocker is a lightweight Windows tray app that blocks chosen `.exe` programs from running until a code you set yourself is entered. It runs in the background, watches for the blocked apps starting, closes them, and asks for the code before letting them open.
 
-## Features
+## That's what it looks like:
+
+<table>
+<tr>
+<td rowspan="2"><img width="300" height="318" alt="image" src="https://github.com/user-attachments/assets/49c654c4-0dd7-4d49-8a67-580ffafc8caf" /></td>
+<td><img width="225" height="117" alt="image" src="https://github.com/user-attachments/assets/872d8adf-887d-47c7-a7ca-3f264b0aa16f" /></td>
+</tr>
+<tr>
+<td><img width="343" height="162" alt="image" src="https://github.com/user-attachments/assets/36772c8d-eed2-4c3a-87e1-d136cea9464b" /></td>
+</tr>
+</table>
+
+
+## Features ✅
 
 - Add/remove any `.exe` from a simple list-based GUI
 - Set (and change) your own unlock code
@@ -24,7 +37,7 @@ This is a **solo-developed, hobby project**, and I'm still learning. Please keep
 - There is **no warranty** of any kind. Use at your own risk.
 - Bug reports and feedback are welcome (open an Issue) — that's how this improves.
 
-## Installation
+## Installation ⬇️
 
 1. Download `AppBlockerSetup.exe` from the [Releases](../../releases) page.
 2. Run the installer and launch AppBlocker.
